@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  backend:
+    image: devops-end-to-end-backend:latest  # Use the existing backend image
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    deploy:
+      replicas: 2  # Run 2 replicas of the backend service
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    environment:
+      DATABASE_URL: mysql://root:password@db:3306/mydatabase
+
+  frontend:
+    image: devops-end-to-end-frontend:latest  # Use the existing frontend image
+    ports:
+      - "3000:3000"
+    deploy:
+      replicas: 1  # Run 1 instance of the frontend service
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  db_data:
+
