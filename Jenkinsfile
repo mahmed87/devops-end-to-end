@@ -3,7 +3,9 @@ pipeline {
     stages {
         stage('Clone repository') {
             steps {
-                git branch: 'selective-push', url: 'https://github.com/mahmed87/devops-end-to-end.git'
+                git branch: 'selective-push', 
+                      url: 'https://github.com/mahmed87/devops-end-to-end.git', 
+                      credentialsId: 'github-credentials-id'
             }
         }
         stage('Build Docker images') {
@@ -14,7 +16,9 @@ pipeline {
         }
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-login', 
+                                                  usernameVariable: 'DOCKER_USER', 
+                                                  passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                     sh 'docker push ahmeddihe/devops-end-to-end-backend:latest'
                     sh 'docker push ahmeddihe/devops-end-to-end-frontend:latest'
@@ -28,4 +32,3 @@ pipeline {
         }
     }
 }
-
