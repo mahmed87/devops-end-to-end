@@ -28,7 +28,7 @@ pipeline {
         stage('Deploy to Swarm') {
             steps {
                 sshagent(['jenkins-ssh']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ahmed@192.168.0.103 "docker stack deploy --compose-file ~/DevOps-End-to-End/docker-compose.yml myapp --with-registry-auth"'
+		    sh 'ssh -o StrictHostKeyChecking=no ahmed@192.168.0.103 "DOCKER_HOST=unix:///var/run/docker.sock docker stack deploy --compose-file ~/DevOps-End-to-End/docker-compose.yml myapp --with-registry-auth"'
                 }
             }
         }
