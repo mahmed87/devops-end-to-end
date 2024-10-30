@@ -3,9 +3,9 @@ pipeline {
     stages {
         stage('Clone repository') {
             steps {
-                git branch: 'selective-push', 
-                    url: 'https://github.com/mahmed87/devops-end-to-end.git', 
-                    credentialsId: 'github-credentials-id'
+                git branch: 'selective-push',
+                    url: 'https://github.com/mahmed87/devops-end-to-end.git',
+                    credentialsId: 'github-credentials'  // Matches 'github-credentials' ID
             }
         }
         stage('Build Docker images') {
