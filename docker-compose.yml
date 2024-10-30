@@ -1,14 +1,29 @@
 version: '3.8'
 
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"    # Expose HTTP on port 80
+      - "443:443"  # Expose HTTPS on port 443 if SSL is configured in the future
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Mount custom Nginx configuration
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
   backend:
-    image: devops-end-to-end-backend:latest  # Use the existing backend image
+    image: devops-end-to-end-backend:latest
     ports:
       - "5000:5000"
     depends_on:
       - db
     deploy:
-      replicas: 2  # Run 2 replicas of the backend service
+      replicas: 2
       update_config:
         parallelism: 1
         delay: 10s
@@ -18,11 +33,9 @@ services:
       DATABASE_URL: mysql://root:password@db:3306/mydatabase
 
   frontend:
-    image: devops-end-to-end-frontend:latest  # Use the existing frontend image
-    ports:
-      - "3000:3000"
+    image: devops-end-to-end-frontend:latest
     deploy:
-      replicas: 1  # Run 1 instance of the frontend service
+      replicas: 1
       update_config:
         parallelism: 1
         delay: 10s
