@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone repository') {
             steps {
-                git branch: 'selective-push',
+                git branch: 'main',
                     url: 'https://github.com/mahmed87/devops-end-to-end.git',
                     credentialsId: 'github-credentials'  // Matches 'github-credentials' ID
             }
