@@ -1,19 +1,27 @@
-# Use node 14 as the base image
-FROM node:14
+# Use a lightweight Node.js image (Alpine version for reduced size)
+FROM node:14-alpine
+
+# Set environment variables
+ENV NODE_ENV=production
 
 # Set working directory in the container
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json /app/
-RUN npm install
+# Copy package.json and package-lock.json (if available) to leverage Docker caching
+COPY package.json package-lock.json ./
 
-# Copy the rest of the application code
-COPY . /app
+# Install dependencies (production only to reduce size)
+RUN npm install --production
 
-# Expose the port for the frontend (React typically runs on port 3000)
+# Copy only necessary files to the container
+COPY . .
+
+# Build the React application (if it's a React-based frontend)
+RUN npm run build
+
+# Expose the port for the frontend
 EXPOSE 3000
 
-# Start the application
+# Start the application (serve the production build if using React)
 CMD ["npm", "start"]
 
