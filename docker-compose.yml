@@ -10,7 +10,9 @@ services:
       - backend
       - frontend
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # Mount the nginx.conf file
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt/live/waqasdev.online/fullchain.pem:/etc/letsencrypt/live/waqasdev.online/fullchain.pem:ro
+      - /etc/letsencrypt/live/waqasdev.online/privkey.pem:/etc/letsencrypt/live/waqasdev.online/privkey.pem:ro
     networks:
       - devops-network
     deploy:
@@ -63,4 +65,3 @@ volumes:
 networks:
   devops-network:
     driver: overlay
-
