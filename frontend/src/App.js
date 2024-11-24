@@ -4,7 +4,7 @@ import FetchData from './components/FetchData';
 function App() {
   return (
     <div className="App">
-      <h1>Frontend with Backend Integration app</h1>
+      <h1>Frontend with Backend Integration</h1>
       <FetchData />
     </div>
   );
